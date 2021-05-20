@@ -9,8 +9,11 @@
     </div>
     <div class="endpoint-list">
       <div v-for="(endpoint, index) in endpoint_list" class="card" :key="index">
-        <div class="card-title" >
-          <router-link :to="{'name': 'endpoint-detail', params: {endpoint: endpoint.id}}">{{ endpoint.endpoint_suffix }}</router-link>
+        <div class="card-title">
+          <router-link :to="{'name': 'endpoint-detail', params: {endpoint: endpoint.id}}">{{
+              endpoint.endpoint_suffix
+            }}
+          </router-link>
         </div>
         <div class="details">
           <div>
@@ -22,6 +25,8 @@
         </div>
       </div>
     </div>
+    <button class="nav-button" @click="prevPage">Previous</button>
+    <button class="nav-button" @click="nextPage">Next</button>
     <!--    <modal height="auto" class="endpoint-create-modal" name="endpoint-create">-->
     <!--      <section class="modal-box">-->
     <!--        <input v-model="endpoint">-->
@@ -42,9 +47,26 @@ export default {
     return {
       endpoint: '',
       endpoint_list: [],
+      offset: 0,
     }
   },
   methods: {
+    nextPage() {
+      if (this.offset > 0 && this.endpoint_list.length) {
+        this.offset += 20
+        this.getEndpoints()
+      }
+      if (this.offset == 0){
+        this.offset += 20
+        this.getEndpoints()
+      }
+    },
+    prevPage() {
+      if (this.offset > 0) {
+        this.offset -= 20
+        this.getEndpoints()
+      }
+    },
     createEndpoint() {
       EndpointApi.create_endpoint().then(response => {
         if (response.status === 201) {
@@ -63,14 +85,14 @@ export default {
     getTime(created) {
       let m_created = this.$moment(created)
       let expiry = this.$moment(m_created).add(1, 'hours')
-      console.log(expiry.unix() - m_created.unix())
-      console.log(m_created.toString())
-      console.log(expiry.toString())
-      console.log(expiry.from(this.$moment()))
+      // console.log(expiry.unix() - m_created.unix())
+      // console.log(m_created.toString())
+      // console.log(expiry.toString())
+      // console.log(expiry.from(this.$moment()))
       return expiry.from(this.$moment())
     },
     getEndpoints() {
-      EndpointApi.list_endpoints({}).then(response => {
+      EndpointApi.list_endpoints({limit: 20, offset: this.offset}).then(response => {
         this.endpoint_list = response.data.results
       })
     }
@@ -130,20 +152,26 @@ export default {
   flex-wrap: wrap;
   min-height: 70%;
   max-height: 70%;
+  align-content: start;
+  overflow-y: scroll;
 }
 
 .card {
   padding: 20px 15px;
-  border: 1px solid slategrey;
+  border: 1px solid lightgrey;
   border-radius: 2px;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
   height: fit-content;
   margin-right: 20px;
+  margin-bottom: 20px;
+  min-width: 250px;
   max-width: 250px;
 }
+
 .card-title {
   padding-bottom: 16px;
 }
+
 .card .card-title a {
   font-size: 16px;
   font-weight: 500;
@@ -151,7 +179,28 @@ export default {
   cursor: pointer;
   text-decoration: none;
 }
+
 .card-title a:hover {
   color: #126d6e;
+}
+
+.card .details {
+  text-align: left;
+}
+
+.nav-button {
+  border: none;
+  background: cornflowerblue;
+  margin-right: 10px;
+  padding: 7px 12px;
+  border-radius: 3px;
+  color: white;
+  outline: none;
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.nav-button:hover {
+  background: dodgerblue;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
 }
 </style>

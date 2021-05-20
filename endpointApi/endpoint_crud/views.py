@@ -38,7 +38,7 @@ class EndpointViewSet(viewsets.ModelViewSet):
            try:
             endpoint = Endpoint.objects.get(pk=obj_id)
             serializer = self.get_serializer(endpoint)
-            endpoint_act = EndpointActivity.objects.filter(endpoint=endpoint)
+            endpoint_act = EndpointActivity.objects.filter(endpoint=endpoint)[:10]
             activity_serializer = EndpointActivitySerializer(endpoint_act, many=True)
             data = {
                 'endpoint': serializer.data,

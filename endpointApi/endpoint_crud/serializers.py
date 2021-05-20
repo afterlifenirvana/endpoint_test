@@ -1,4 +1,7 @@
 import json
+from datetime import timedelta
+
+from django.utils import timezone
 from rest_framework import serializers
 
 from endpoint_crud.models import Endpoint, EndpointActivity
@@ -12,7 +15,9 @@ class EndpointSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def get_hits(self, instance):
-        return EndpointActivity.objects.filter(endpoint=instance).count()
+        now = timezone.now()
+        before = now - timedelta(minutes=5)
+        return EndpointActivity.objects.filter(endpoint=instance, created__range=(before, now)).count()
 
 
 class EndpointActivitySerializer(serializers.ModelSerializer):
