@@ -43,7 +43,7 @@ class EndpointViewSet(viewsets.ModelViewSet):
             data = {
                 'endpoint': serializer.data,
                 'endpoint_activity': activity_serializer.data,
-                'base_url': request.build_absolute_uri('api/')
+                'base_url': request.build_absolute_uri('/api/')
             }
             return Response(data, status=status.HTTP_200_OK)
            except Endpoint.DoesNotExist:
