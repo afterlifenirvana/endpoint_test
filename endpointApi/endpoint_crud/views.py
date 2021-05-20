@@ -81,7 +81,7 @@ class EndpointActivityViewSet(views.APIView):
         if url:
             return self.add_activity(request, url)
         else:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            return Response({'message': 'ended up in activity'}, status=status.HTTP_400_BAD_REQUEST)
 
     def post(self, request, *args, **kwargs):
         url = kwargs.get('url', '')
