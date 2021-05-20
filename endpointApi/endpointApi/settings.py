@@ -23,12 +23,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-hb66qe!_6a(dp$s$a0$mq$c(*55jry#hzlqu1t!$p*sc)2wwqw'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8080",
     "http://127.0.0.1:8080",
+    "http://ec2-3-7-189-139.ap-south-1.compute.amazonaws.com"
 ]
 CORS_ALLOW_HEADERS = [
     "accept",
@@ -53,6 +54,12 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'endpoint_crud'
+]
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    'localhost',
+    'ec2-3-7-189-139.ap-south-1.compute.amazonaws.com',
+    '3.7.189.139'
 ]
 
 MIDDLEWARE = [
