@@ -27,6 +27,6 @@ app.conf.beat_schedule = {
     # Execute the Speed Test every 10 minutes
     'delete_older_point_1min': {
         'task': 'delete_older_endpoints',
-        'schedule': 10.0,
+        'schedule': crontab(minute='*/1'),
     },
 }
